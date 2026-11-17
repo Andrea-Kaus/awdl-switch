@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+# Other volumes will load the service when they boot.
+[[ "$3" == "/" ]] || exit 0
+
+label=com.andreakaus.awdlswitch.helper
+if /bin/launchctl print "system/$label" >/dev/null 2>&1; then
+    /bin/launchctl bootout "system/$label"
+fi
+/bin/launchctl bootstrap system "/Library/LaunchDaemons/$label.plist"
